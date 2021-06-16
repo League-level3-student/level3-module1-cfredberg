@@ -15,7 +15,23 @@ public class LongChipCompetition {
 
     public static void main(String[] args) {
         LongChipCompetition lcc = new LongChipCompetition();
-
+        lcc.initializeBeatles();
+        double length = 0;
+        String name = "";
+        for (int i = 0; i < lcc.getTheBand().size(); i++) {
+        	for (int j = 0; j < lcc.getTheBand().get(i).getChips().size(); j++) {
+        		if (lcc.getTheBand().get(i).getChips().get(j).getLength() > length) {
+        			System.out.println(lcc.getTheBand().get(i).getChips().get(j).getLength());
+        			System.out.println(lcc.getTheBand().get(i).getName());
+        			length = lcc.getTheBand().get(i).getChips().get(j).getLength();
+        			name = lcc.getTheBand().get(i).getName();
+        		}
+        	}
+        }
+        
+        System.out.println(name + ": " + length);
+        
+        //lcc.getTheBand().get(0).getChips().get(2).getLength()
     }
 
     private void initializeBeatles() {
