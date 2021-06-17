@@ -1,5 +1,8 @@
 package _05_Intro_To_Hash_Maps;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class _02_LogSearch {
     /* 
@@ -33,5 +36,29 @@ public class _02_LogSearch {
      *      If this ID exists in the HashMap, remove it. Otherwise, notify the
      *      user that the ID is not in the list. 
      */
-
+	public static void main(String[] args) {
+		_02_LogSearch ls = new _02_LogSearch();
+		ls.run();
+	}
+	
+	public void run() {
+		JFrame frame = new JFrame("Hash Maps");
+		JPanel panel = new JPanel();
+		JButton add = new JButton();
+		JButton search = new JButton();
+		JButton view = new JButton();
+		JButton remove = new JButton();
+		
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		frame.add(panel);
+		
+		panel.add(add);
+		panel.add(search);
+		panel.add(view);
+		panel.add(remove);
+		
+		frame.pack();
+	}
 }
