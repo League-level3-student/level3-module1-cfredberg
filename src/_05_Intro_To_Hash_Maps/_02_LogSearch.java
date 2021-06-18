@@ -1,10 +1,17 @@
 package _05_Intro_To_Hash_Maps;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Set;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class _02_LogSearch {
+public class _02_LogSearch implements ActionListener {
     /* 
      * Crate a HashMap of Integers for the keys and Strings for the values.
      * Create a GUI with three buttons. 
@@ -41,16 +48,19 @@ public class _02_LogSearch {
 		ls.run();
 	}
 	
+	JFrame frame = new JFrame("Hash Maps");
+	JPanel panel = new JPanel();
+	JButton add = new JButton("Add Entry");
+	JButton search = new JButton("Search By ID");
+	JButton view = new JButton("View List");
+	JButton remove = new JButton("Remove Entry");
+	
+	HashMap<Double, String> hm = new HashMap<Double, String>();
+	
 	public void run() {
-		JFrame frame = new JFrame("Hash Maps");
-		JPanel panel = new JPanel();
-		JButton add = new JButton();
-		JButton search = new JButton();
-		JButton view = new JButton();
-		JButton remove = new JButton();
-		
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setPreferredSize(new Dimension(500, 500));
 		
 		frame.add(panel);
 		
@@ -59,6 +69,78 @@ public class _02_LogSearch {
 		panel.add(view);
 		panel.add(remove);
 		
+		add.addActionListener(this);
+		
+		search.addActionListener(this);
+		
+		view.addActionListener(this);
+		
+		remove.addActionListener(this);
+		
 		frame.pack();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == add) {
+			String idString = JOptionPane.showInputDialog("Please Enter an ID Number (Other Than 0)");
+			
+			String name = JOptionPane.showInputDialog("Please Enter Your Name");
+			
+			double id = Double.parseDouble(idString);
+			
+			hm.put(id, name);
+		}else if (e.getSource() == search) {
+			boolean stop = true;
+			
+			double id = 0;
+			
+			while (stop) {
+				String idString = JOptionPane.showInputDialog("Please Enter Your ID Number");
+				
+				try {
+					id = Double.parseDouble(idString);
+					if (id == 0) {
+						JOptionPane.showMessageDialog(null, "Please Enter an ID Other Than 0");
+					}else {
+						stop = false;
+					}
+				} catch (Exception e2){
+					JOptionPane.showMessageDialog(null, "Please Enter an ID");
+				}
+			}
+			
+			
+				
+			//String name = "";
+			boolean didFindName = false;
+			
+			Set set = hm.keySet();
+			
+			for (int i = 0; i < set.size(); i++) {
+				if (set.contains(id)) {
+					didFindName = true;
+				}
+			}
+			
+			if (didFindName == true) {
+				JOptionPane.showMessageDialog(null, "Name: " + hm.get(id));
+			}else {
+				JOptionPane.showMessageDialog(null, "ID Does Not Exist");
+			}
+		}else if (e.getSource() == view) {
+			Set set = hm.keySet();
+			
+			String message = "";
+			
+			Object[] setA = set.toArray();
+			
+			for (int i = 0; i < setA.length; i++) {
+				message = message + "ID: " + setA[i] + " Name: " + hm.get(setA[i]) + "\n\n";
+			}
+			
+			JOptionPane.showMessageDialog(null, message);
+		}
 	}
 }
