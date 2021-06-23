@@ -141,6 +141,12 @@ public class _02_LogSearch implements ActionListener {
 			}
 			
 			JOptionPane.showMessageDialog(null, message);
+		}else if (e.getSource() == remove) {
+			String id = JOptionPane.showInputDialog("What ID would you like to remove?");
+			
+			double idd = Double.parseDouble(id);
+			
+			hm.remove(idd);
 		}
 	}
 }
