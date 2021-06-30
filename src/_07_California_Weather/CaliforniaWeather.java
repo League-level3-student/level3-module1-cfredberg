@@ -1,6 +1,15 @@
 package _07_California_Weather;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /*
  * OBJECTIVE:
@@ -9,7 +18,7 @@ import java.util.HashMap;
  * and the Utilities class inside this project to get the temperature data
  * from a day in December 2020.
  * Example: User: Encinitas
- *          Program: Encinitas is Overcast with a tempeature of 59.01 °F
+ *          Program: Encinitas is Overcast with a temperature of 59.01 °F
  * 
  * 2. Create a way for the user to specify the weather condition and then
  * list the cities that have those conditions.
@@ -27,19 +36,70 @@ import java.util.HashMap;
  * temperature, you can get a free API key at: https://openweathermap.org/api 
  */
 
-public class CaliforniaWeather {
-    
+public class CaliforniaWeather implements ActionListener {
+	HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
+	JButton city = new JButton("City");
+    JButton condition = new JButton("Condition");
+    JButton temp = new JButton("Temp");
     void start() {
-        HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
+        
+        
+        JFrame frame = new JFrame("Weather");
+        JPanel panel = new JPanel();
+        
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(panel);
+        
+        panel.add(city);
+        panel.add(condition);
+        panel.add(temp);
+        
+        city.addActionListener(this);
+        
+        condition.addActionListener(this);
+        
+        temp.addActionListener(this);
+        
+        frame.pack();
         
         // All city keys have the first letter capitalized of each word
-        String cityName = Utilities.capitalizeWords( "National City" );
-        WeatherData datum = weatherData.get(cityName);
         
-        if( datum == null ) {
-            System.out.println("Unable to find weather data for: " + cityName);
-        } else {
-            System.out.println(cityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F");
-        }
     }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == city) {
+			String cityName = Utilities.capitalizeWords( JOptionPane.showInputDialog("Please enter a city:") );
+	        WeatherData datum = weatherData.get(cityName);
+	        
+	        if( datum == null ) {
+	            System.out.println("Unable to find weather data for: " + cityName);
+	        } else {
+	            System.out.println(cityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F");
+	        }
+		}else if (e.getSource() == condition) {
+			Set<String> citiesSet = weatherData.keySet();
+			String[] cities = (String[]) citiesSet.toArray();
+			ArrayList<String> myCities = new ArrayList<String>();
+			
+			String condName = Utilities.capitalizeWords( JOptionPane.showInputDialog("Please enter a condition:") );
+	        WeatherData datum = weatherData.get(condName);
+	        
+	        for (int i = 0; i < cities.length; i++) {
+	        	String currentCity = cities[i];
+	        	WeatherData data = weatherData.get(currentCity);
+	        	if (data.weatherSummary.equals(condName)) {
+	        		myCities.add(currentCity);
+	        	}
+	        }
+	        
+	        if( datum == null ) {
+	            System.out.println("Unable to find weather data for: " + condName);
+	        } else {
+	            System.out.println(myCities.toString());
+	        }
+		}
+	}
 }
