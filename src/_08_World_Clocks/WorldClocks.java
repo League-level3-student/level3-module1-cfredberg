@@ -3,10 +3,14 @@ package _08_World_Clocks;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.Timer;
@@ -42,17 +46,22 @@ public class WorldClocks implements ActionListener {
     JFrame frame;
     JPanel panel;
     JTextArea textArea;
+    JButton button;
     
     String city;
     String dateStr;
     String timeStr;
     
+    HashMap<String, TimeZone> hm = new HashMap<String, TimeZone>();
+    
     public WorldClocks() {
         clockUtil = new ClockUtilities();
 
         // The format for the city must be: city, country (all caps)
-        city = "Chicago, US";
+        city = "San Diego, US";
         timeZone = clockUtil.getTimeZoneFromCityName(city);
+        
+        hm.put(city, clockUtil.getTimeZoneFromCityName(city));
         
         Calendar calendar = Calendar.getInstance(timeZone);
         String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
@@ -65,12 +74,15 @@ public class WorldClocks implements ActionListener {
         frame = new JFrame();
         panel = new JPanel();
         textArea = new JTextArea();
+        button = new JButton("Add/Remove Clock");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setSize(100, 100);
         frame.add(panel);
         panel.add(textArea);
+        panel.add(button);
         textArea.setText(city + "\n" + dateStr);
+        button.addActionListener(this);
         
         // This Timer object is set to call the actionPerformed() method every
         // 1000 milliseconds
@@ -80,13 +92,22 @@ public class WorldClocks implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        Calendar c = Calendar.getInstance(timeZone);
-        String militaryTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND);
-        String twelveHourTime = " [" + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + "]";
-        timeStr = militaryTime + twelveHourTime;
-        
-        System.out.println(timeStr);
-        textArea.setText(city + "\n" + dateStr + "\n" + timeStr);
-        frame.pack();
+    	if (arg0.getSource().equals(timer)) {
+    		Set<String> cities = hm.keySet();
+    		
+	        Calendar c = Calendar.getInstance(timeZone);
+	        String militaryTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND);
+	        String twelveHourTime = " [" + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + "]";
+	        timeStr = militaryTime + twelveHourTime;
+	        
+	        System.out.println(timeStr);
+	        textArea.setText(city + "\n" + dateStr + "\n" + timeStr);
+	        frame.pack();
+    	}else if (arg0.getSource().equals(button)) {
+    		String option = JOptionPane.showInputDialog("Would you like to add or remove a clock?");
+    		if (option.equalsIgnoreCase("add")) {
+    			
+    		}
+    	}
     }
 }

@@ -81,22 +81,49 @@ public class CaliforniaWeather implements ActionListener {
 	        }
 		}else if (e.getSource() == condition) {
 			Set<String> citiesSet = weatherData.keySet();
-			String[] cities = (String[]) citiesSet.toArray();
+			//String[] cities = (String[]) citiesSet.toArray();
 			ArrayList<String> myCities = new ArrayList<String>();
 			
 			String condName = Utilities.capitalizeWords( JOptionPane.showInputDialog("Please enter a condition:") );
-	        WeatherData datum = weatherData.get(condName);
+	        //WeatherData datum = weatherData.get(condName);
 	        
-	        for (int i = 0; i < cities.length; i++) {
-	        	String currentCity = cities[i];
+	        for (String currentCity: citiesSet) {
+	        	//String currentCity = citiesSet.get(i);
 	        	WeatherData data = weatherData.get(currentCity);
 	        	if (data.weatherSummary.equals(condName)) {
 	        		myCities.add(currentCity);
 	        	}
 	        }
 	        
-	        if( datum == null ) {
+	        if( myCities == null ) {
 	            System.out.println("Unable to find weather data for: " + condName);
+	        } else {
+	            System.out.println(myCities.toString());
+	        }
+		}else if (e.getSource() == temp) {
+			Set<String> citiesSet = weatherData.keySet();
+			//String[] cities = (String[]) citiesSet.toArray();
+			ArrayList<String> myCities = new ArrayList<String>();
+			
+			String maxTempS = Utilities.capitalizeWords( JOptionPane.showInputDialog("Please enter the maximum temperature:") );
+			String minTempS = Utilities.capitalizeWords( JOptionPane.showInputDialog("Please enter the minimum temperature:") );
+	        double maxTemp = Double.parseDouble(maxTempS);
+	        double minTemp = Double.parseDouble(minTempS);
+			
+			//WeatherData datum = weatherData.get(condName);
+	        
+	        for (String currentCity: citiesSet) {
+	        	//String currentCity = citiesSet.get(i);
+	        	WeatherData data = weatherData.get(currentCity);
+	        	if (data.temperatureF > minTemp) {
+	        		if (data.temperatureF < maxTemp) {
+	        			myCities.add(currentCity);
+	        		}
+	        	}
+	        }
+	        
+	        if( myCities == null ) {
+	            System.out.println("Unable to find weather data for maximum: " + maxTempS + ", minimum: " + minTempS);
 	        } else {
 	            System.out.println(myCities.toString());
 	        }
