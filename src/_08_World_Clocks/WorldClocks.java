@@ -68,7 +68,7 @@ public class WorldClocks implements ActionListener {
         String dayOfWeek = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         dateStr = dayOfWeek + " " + month + " " + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
         
-        System.out.println(dateStr);
+        //System.out.println(dateStr);
 
         // Sample starter program
         frame = new JFrame();
@@ -94,19 +94,33 @@ public class WorldClocks implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
     	if (arg0.getSource().equals(timer)) {
     		Set<String> cities = hm.keySet();
+    		String clocks = "";
     		
-	        Calendar c = Calendar.getInstance(timeZone);
-	        String militaryTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND);
-	        String twelveHourTime = " [" + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + "]";
-	        timeStr = militaryTime + twelveHourTime;
+    		for (String currentCity: cities) {
+    			try {
+    				Calendar c = Calendar.getInstance(hm.get(currentCity));
+        	        String month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        	        String dayOfWeek = c.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        			dateStr = dayOfWeek + " " + month + " " + c.get(Calendar.DAY_OF_MONTH) + " " + c.get(Calendar.YEAR);
+    		        String militaryTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND);
+    		        String twelveHourTime = " [" + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + "]";
+    		        timeStr = militaryTime + twelveHourTime;
+    		        
+    		        clocks = clocks + "\n" + currentCity + "\n" + dateStr + "\n" + timeStr + "\n";
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, currentCity + " does not exist.");
+					hm.remove(currentCity);
+				}
+    		}
 	        
-	        System.out.println(timeStr);
-	        textArea.setText(city + "\n" + dateStr + "\n" + timeStr);
+	        //System.out.println(timeStr);
+	        textArea.setText(clocks);
 	        frame.pack();
     	}else if (arg0.getSource().equals(button)) {
     		String option = JOptionPane.showInputDialog("Would you like to add or remove a clock?");
     		if (option.equalsIgnoreCase("add")) {
-    			
+    			String newCity = JOptionPane.showInputDialog("What city would you like to add?");
+    			hm.put(newCity, clockUtil.getTimeZoneFromCityName(newCity));
     		}
     	}
     }
